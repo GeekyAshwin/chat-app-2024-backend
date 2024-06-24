@@ -1,13 +1,26 @@
-const { Server} = require('socket.io')
+const express = require('express');
+const cors = require('cors');
+require('dotenv').config();
+const { GoogleGenerativeAI } = require('@google/generative-ai');
+const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+const app = express();
 
-const server = new Server({cors: {origin: 'http://localhost:4200'}});
+app.use(cors());
 
-server.on('connection', (socket) => {
-    console.log('connected');
-    socket.on('message', (data) => {
-        console.log(data);
-        socket.broadcast.emit('received', {data: data, message: 'This is a test message from server.'});
-    })
-})
+async function sendMessage(message) {
+    const model = await genAI.getGenerativeModel({model: "gemini-pro"});
+    const data = await model.generateContent(message);
+    return data;
+}
 
-server.listen(4000);
+app.use(express.json());
+app.post('', (request, response) => {
+    let message = request.body.message;
+    sendMessage(message).then((data) => {
+        response.send({user: 'server', message: data.response.text()});
+    });
+});
+
+app.listen(4000, () => {
+    console.log('App is running...');
+});

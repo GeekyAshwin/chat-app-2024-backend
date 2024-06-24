@@ -1,7 +1,7 @@
 {
   "name": "chatapp2024",
   "version": "1.0.0",
-  "description": "a simple chat app using nodejs",
+  "description": "a simple chat bot using nodejs",
   "main": "index.js",
   "scripts": {
     "test": "npm run test"
@@ -9,8 +9,10 @@
   "author": "ashwini",
   "license": "ISC",
   "dependencies": {
+    "@google/generative-ai": "^0.2.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.4",
     "express": "^4.18.2",
-    "nodemon": "^3.0.3",
-    "socket.io": "^4.7.4"
+    "nodemon": "^3.0.3"
   }
 }
